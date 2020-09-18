@@ -4,15 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _uuid = require('uuid4');
-
-var _uuid2 = _interopRequireDefault(_uuid);
 
 var _propTypes = require('prop-types');
 
@@ -40,10 +38,10 @@ var ReactFileReader = function (_React$Component) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactFileReader.__proto__ || Object.getPrototypeOf(ReactFileReader)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-      elementId: _this.props.elementId || (0, _uuid2.default)()
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactFileReader.__proto__ || Object.getPrototypeOf(ReactFileReader)).call.apply(_ref, [this].concat(args))), _this), _this.fileInput = null, _this.setFileInput = function (element) {
+      _this.fileInput = element;
     }, _this.clickInput = function () {
-      var element = document.getElementById(_this.state.elementId);
+      var element = _this.fileInput;
       element.value = '';
       element.click();
     }, _this.handleFiles = function (event) {
@@ -104,18 +102,23 @@ var ReactFileReader = function (_React$Component) {
         position: 'fixed'
       };
 
+      var optionalAttributes = {};
+      if (this.props.elementId) {
+        optionalAttributes.id = this.props.elementId;
+      }
+
       return _react2.default.createElement(
         'div',
         { className: 'react-file-reader' },
-        _react2.default.createElement('input', { type: 'file',
+        _react2.default.createElement('input', _extends({ type: 'file',
           onChange: this.handleFiles,
           accept: Array.isArray(this.props.fileTypes) ? this.props.fileTypes.join(',') : this.props.fileTypes,
           className: 'react-file-reader-input',
-          id: this.state.elementId,
+          ref: this.setFileInput,
           multiple: this.props.multipleFiles,
           style: hideInput,
           disabled: this.props.disabled
-        }),
+        }, optionalAttributes)),
         _react2.default.createElement(
           'div',
           { className: 'react-file-reader-button', onClick: this.clickInput },
@@ -144,5 +147,6 @@ ReactFileReader.propTypes = {
   fileTypes: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.array]),
   base64: _propTypes2.default.bool,
   children: _propTypes2.default.element.isRequired,
-  disabled: _propTypes2.default.bool
+  disabled: _propTypes2.default.bool,
+  elementId: _propTypes2.default.string
 };
